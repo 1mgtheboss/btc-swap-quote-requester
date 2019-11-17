@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>BTC Swap Quote Requester</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        background: #f857a6; /* fallback for old browsers */
+        background: -webkit-linear-gradient(
+          to right,
+          #ff5858,
+          #f857a6
+        ); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(
+          to right,
+          #ff5858,
+          #f857a6
+        ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        font-family: "Quicksand", sans-serif;
+        color: #ffffff;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        background: transparent;
+        border: 1px solid white;
+        outline: none;
+        color: #ffffff;
+      }
+
+      div#request-quote {
+        width: 99.5%;
+        border: 1px solid white;
+        cursor: pointer;
+        padding-left: 5px;
+      }
+
+      .header {
+        font-size: 450%;
+      }
+
+      ::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: #ffffff;
+        opacity: 1; /* Firefox */
+        font-family: "Quicksand", sans-serif;
+        padding-left: 5px;
+      }
+      :-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        color: #ffffff;
+        font-family: "Quicksand", sans-serif;
+        padding-left: 5px;
+      }
+      ::-ms-input-placeholder {
+        /* Microsoft Edge */
+        color: #ffffff;
+        font-family: "Quicksand", sans-serif;
+        padding-left: 5px;
+      }
+      div#result {
+        width: 100%;
+        word-wrap: break-word;
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div class="header">BTC Swap Quote Requester</div>
+    <br /><br />
+    <input
+      type="text"
+      id="invoice"
+      placeholder="Please enter invoice ..."
+    /><br /><br />
+    <input
+      type="text"
+      id="refund-address"
+      placeholder="Please enter refund address ..."
+    /><br /><br />
+    <div id="request-quote">Request quote</div>
+    <br /><br />
+    <div id="result"></div>
+
+    <script>
+      $(document).ready(function() {
+        function requestquoteclickeventhandler() {
+          $.ajax({
+            url: "/request-quote",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+              invoice: $("#invoice").val(),
+              "refund-address": $("#refund-address").val()
+            }),
+            success: function(response) {
+              if (JSON.stringify(response) == "{}") {
+                $("#result")
+                  .html(
+                    "There was an error. Are you sure you have provided correct input data?"
+                  )
+                  .hide()
+                  .fadeIn();
+              } else {
+                $("#result")
+                  .html(JSON.stringify(response))
+                  .hide()
+                  .fadeIn();
+              }
+            }
+          });
+        }
+        $("#request-quote").click(function() {
+          requestquoteclickeventhandler();
+          requestquoteclickeventhandler();
+          requestquoteclickeventhandler();
+        });
+      });
+    </script>
+  </body>
+</html>
